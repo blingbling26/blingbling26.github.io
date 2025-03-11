@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 Homepage</title>
+    <link rel="stylesheet" href="css/cssstyle4.css">
+</head>
+<body>
+    <body>
+        <!-- 导航栏 -->
+        <nav>
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="interaction.html">神器图册</a></li>
+                <li><a href="experience.html">互动体验</a></li>
+                <li><a href="comments.html">共创社区</a></li>
+            </ul>
+        </nav>
+
+    <div class="container">
+        <h1>共创社区</h1>
+        <!-- 添加话题标签选择 -->
+        <div class="topic-tags">
+            <span>选择话题:</span>
+            <button class="tag-btn active" data-tag="">全部</button>
+            <button class="tag-btn" data-tag="神器">神器</button>
+            <button class="tag-btn" data-tag="交互">交互</button>
+            <button class="tag-btn" data-tag="故事">故事</button>
+            <button class="tag-btn" data-tag="创意">创意</button>
+        </div>
+        
+        <form class="comment-form">
+            <textarea id="comment-input" placeholder="请输入评论..."></textarea>
+            <div class="comment-actions-row">
+                <!-- 添加表情选择器 -->
+                <div class="emoji-picker">
+                    <button type="button" id="emoji-btn">😊 表情</button>
+                    <div class="emoji-panel" style="display: none;">
+                        <span>😊</span><span>😂</span><span>🤔</span><span>👍</span><span>❤️</span>
+                    </div>
+                </div>
+                <!-- 添加图片上传 -->
+                <div class="upload-section">
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    <button type="button" onclick="document.getElementById('image-upload').click()">📷 添加图片</button>
+                    <div id="image-preview"></div>
+                </div>
+                <button type="button" class="submit-btn" onclick="submitComment()">提交评论</button>
+            </div>
+        </form>
+        
+        <!-- 添加排序选项 -->
+        <div class="sort-options">
+            <select id="sort-select" onchange="sortComments()">
+                <option value="newest">最新</option>
+                <option value="oldest">最早</option>
+                <option value="likes">最多点赞</option>
+            </select>
+        </div>
+        
+        <ul class="comments" id="comments-list"></ul>
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <script>
+        const commentsPerPage = 5;
+        let currentPage = 1;
+        let comments = JSON.parse(localStorage.getItem('comments')) || [];
+        let selectedTag = '';
+        
+        // 用户名和对应的头像
+        const avatarConfig = [
+            { name: '孙悟空', image: 'img/孙悟空.png' },
+            { name: '筋斗云', image: 'img/筋斗云.png' },
+            { name: '金箍棒', image: 'img/金箍棒.png' },
+            { name: '芭蕉扇', image: 'img/芭蕉扇.png' },
+            { name: '九齿钉耙', image: 'img/九齿钉耙.png' },
+            { name: '紧箍儿', image: 'img/紧箍儿AI.png' },
+            { name: '金刚琢', image: 'img/金刚琢AI.png' }
+        ];
+        
+        // 预加载头像图片
+        const avatarImages = avatarConfig.map(config => {
+            const img = new Image();
+            img.src = config.image;
+            return img;
+        });
+
+        // 表情选择器功能
+        document.getElementById('emoji-btn').onclick = function() {
+            const panel = document.querySelector('.emoji-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        };
+
+        document.querySelector('.emoji-panel').onclick = function(e) {
+            if(e.target.tagName === 'SPAN') {
+                const commentInput = document.getElementById('comment-input');
+                commentInput.value += e.target.textContent;
+            }
+        };
+
+        // 图片上传预览
+        document.getElementById('image-upload').onchange = function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('image-preview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px;">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // 话题标签选择
+        document.querySelectorAll('.tag-btn').forEach(btn => {
+            btn.onclick = function() {
+                selectedTag = this.dataset.tag;
+                document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                loadComments();
+            }
+        });
+
+        // 排序功能
+        function sortComments() {
+            const sortType = document.getElementById('sort-select').value;
+            switch(sortType) {
+                case 'newest':
+                    comments.sort((a, b) => b.timestamp - a.timestamp);
+                    break;
+                case 'oldest':
+                    comments.sort((a, b) => a.timestamp - b.timestamp);
+                    break;
+                case 'likes':
+                    comments.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                    break;
+            }
+            loadComments();
+        }
+
+        // 加载评论
+        function loadComments() {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            let filteredComments = selectedTag ? 
+                comments.filter(c => c.tag === selectedTag) : 
+                comments;
+            
+            const start = (currentPage - 1) * commentsPerPage;
+            const end = start + commentsPerPage;
+            const pageComments = filteredComments.slice(start, end);
+
+            pageComments.forEach(comment => {
+                const li = document.createElement('li');
+                const img = document.createElement('img');
+                
+                img.src = comment.avatar;
+                img.alt = comment.userName;
+                img.className = 'avatar';
+                
+                const userDiv = document.createElement('div');
+                userDiv.className = 'comment-user';
+                userDiv.textContent = comment.userName;
+                
+                const content = document.createElement('div');
+                content.className = 'comment-content';
+                content.textContent = comment.text;
+                
+                // 如果有图片，显示图片
+                if(comment.image) {
+                    const imgContent = document.createElement('img');
+                    imgContent.src = comment.image;
+                    imgContent.className = 'comment-image';
+                    content.appendChild(imgContent);
+                }
+                
+                const actions = document.createElement('div');
+                actions.className = 'comment-actions';
+                
+                // 添加点赞功能
+                const likeButton = document.createElement('button');
+                likeButton.innerHTML = `👍 ${comment.likes || 0}`;
+                likeButton.onclick = () => likeComment(comment.id);
+                
+                // 添加回复功能
+                const replyButton = document.createElement('button');
+                replyButton.textContent = '回复';
+                replyButton.onclick = () => replyToComment(comment.id);
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '删除';
+                deleteButton.onclick = () => deleteComment(comment.id);
+                
+                actions.appendChild(likeButton);
+                actions.appendChild(replyButton);
+                actions.appendChild(deleteButton);
+                
+                const commentHeader = document.createElement('div');
+                commentHeader.className = 'comment-header';
+                commentHeader.appendChild(img);
+                
+                const commentInfo = document.createElement('div');
+                commentInfo.className = 'comment-info';
+                commentInfo.appendChild(userDiv);
+                commentInfo.appendChild(content);
+                
+                li.appendChild(commentHeader);
+                li.appendChild(commentInfo);
+                li.appendChild(actions);
+                
+                // 显示回复
+                if(comment.replies && comment.replies.length > 0) {
+                    const repliesContainer = document.createElement('div');
+                    repliesContainer.className = 'replies-container';
+                    
+                    const repliesToggle = document.createElement('button');
+                    repliesToggle.className = 'replies-toggle';
+                    repliesToggle.textContent = `查看回复(${comment.replies.length})`;
+                    repliesToggle.onclick = function() {
+                        const repliesDiv = this.nextElementSibling;
+                        if(repliesDiv.style.display === 'none' || repliesDiv.style.display === '') {
+                            repliesDiv.style.display = 'block';
+                            this.textContent = `收起回复(${comment.replies.length})`;
+                        } else {
+                            repliesDiv.style.display = 'none';
+                            this.textContent = `查看回复(${comment.replies.length})`;
+                        }
+                    };
+                    
+                    const repliesDiv = document.createElement('div');
+                    repliesDiv.className = 'replies';
+                    repliesDiv.style.display = 'none';
+                    
+                    comment.replies.forEach(reply => {
+                        const replyEl = document.createElement('div');
+                        replyEl.className = 'reply';
+                        
+                        // 查找回复者的头像
+                        const replyAvatar = avatarConfig.find(a => a.name === reply.userName);
+                        const avatarImg = document.createElement('img');
+                        avatarImg.src = replyAvatar ? replyAvatar.image : 'img/default-avatar.png';
+                        avatarImg.className = 'reply-avatar';
+                        
+                        const replyContent = document.createElement('div');
+                        replyContent.className = 'reply-content';
+                        
+                        const replyUser = document.createElement('span');
+                        replyUser.className = 'reply-user';
+                        replyUser.textContent = reply.userName;
+                        
+                        const replyText = document.createElement('span');
+                        replyText.className = 'reply-text';
+                        replyText.textContent = `: ${reply.text}`;
+                        
+                        replyContent.appendChild(replyUser);
+                        replyContent.appendChild(replyText);
+                        
+                        replyEl.appendChild(avatarImg);
+                        replyEl.appendChild(replyContent);
+                        
+                        repliesDiv.appendChild(replyEl);
+                    });
+                    
+                    repliesContainer.appendChild(repliesToggle);
+                    repliesContainer.appendChild(repliesDiv);
+                    li.appendChild(repliesContainer);
+                }
+                
+                commentsList.appendChild(li);
+            });
+        }
+
+        // 回复功能
+        function replyToComment(commentId) {
+            const replyText = prompt('请输入回复内容：');
+            if(replyText) {
+                const comment = comments.find(c => c.id === commentId);
+                if(comment) {
+                    comment.replies = comment.replies || [];
+                    const randomAvatar = avatarConfig[Math.floor(Math.random() * avatarConfig.length)];
+                    comment.replies.push({
+                        userName: randomAvatar.name,
+                        text: replyText,
+                        timestamp: new Date()
+                    });
+                    localStorage.setItem('comments', JSON.stringify(comments));
+                    loadComments();
+                }
+            }
+        }
+
+        // 点赞功能
+        function likeComment(commentId) {
+            const comment = comments.find(c => c.id === commentId);
+            if(comment) {
+                comment.likes = (comment.likes || 0) + 1;
+                localStorage.setItem('comments', JSON.stringify(comments));
+                loadComments();
+            }
+        }
+
+        // 提交评论
+        function submitComment() {
+            const commentInput = document.getElementById('comment-input');
+            const commentText = commentInput.value.trim();
+            if (commentText === '') {
+                alert('请输入评论内容！');
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * avatarConfig.length);
+            const avatar = avatarConfig[randomIndex];
+
+            const newComment = {
+                id: Date.now(),
+                text: commentText,
+                timestamp: new Date(),
+                avatar: avatar.image,
+                userName: avatar.name,
+                tag: selectedTag,
+                likes: 0,
+                image: document.getElementById('image-preview').innerHTML ? 
+                    document.getElementById('image-preview').querySelector('img').src : null
+            };
+            
+            comments.push(newComment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+            commentInput.value = '';
+            document.getElementById('image-preview').innerHTML = '';
+            loadComments();
+            updatePagination();
+        }
+
+        // 删除评论
+        function deleteComment(commentId) {
+            if(confirm('确定要删除这条评论吗？')) {
+                comments = comments.filter(comment => comment.id !== commentId);
+                localStorage.setItem('comments', JSON.stringify(comments));
+                loadComments();
+                updatePagination();
+            }
+        }
+
+        // 更新分页
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const filteredComments = selectedTag ? 
+                comments.filter(c => c.tag === selectedTag) : 
+                comments;
+            const totalPages = Math.ceil(filteredComments.length / commentsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.onclick = () => {
+                    currentPage = i;
+                    loadComments();
+                };
+                if (i === currentPage) {
+                    button.disabled = true;
+                    button.style.backgroundColor = '#ccc';
+                }
+                pagination.appendChild(button);
+            }
+        }
+
+        // 初始化
+        window.onload = () => {
+            comments.sort((a, b) => b.timestamp - a.timestamp);
+            document.querySelector('.tag-btn[data-tag=""]').classList.add('active');
+            loadComments();
+            updatePagination();
+        };
+    </script>
+
+</body>
+</html>

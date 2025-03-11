@@ -1,0 +1,369 @@
+/* 让整个页面固定大小 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* 主要容器 */
+#main-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 导航栏 */
+nav {
+    background-color: #2D2D2D;
+    color: #F5F5F5;
+    padding: 14px 40px;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+nav ul li {
+    margin-right: 30px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+nav ul li a:hover {
+    color: #0077b6;
+    background: rgba(255,255,255,0.1);
+}
+body {
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    text-align: center;
+    background-image: url('../img/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 140vh;
+    overflow-y: auto; /* 保留这一个 overflow-y 属性 */
+}
+
+.container {
+    max-width: 900px;
+    margin: 80px auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2.2em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* 话题标签样式 */
+.topic-tags {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tag-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: #f0f0f0;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tag-btn:hover, .tag-btn.active {
+    background: #0077b6;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 评论表单样式 */
+.comment-form {
+    background: rgba(255,255,255,0.8);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 120px;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.comment-form textarea:focus {
+    border-color: #0077b6;
+    box-shadow: 0 0 8px rgba(0,119,182,0.2);
+}
+
+/* 评论操作按钮行 */
+.comment-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 表情选择器样式 */
+.emoji-picker {
+    position: relative;
+}
+
+.emoji-picker button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: #f8f8f8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.emoji-picker button:hover {
+    background: #e0e0e0;
+}
+
+.emoji-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 5px;
+}
+
+.emoji-panel span {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.emoji-panel span:hover {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* 图片上传区域 */
+.upload-section {
+    position: relative;
+}
+
+.upload-section button {
+    background: #f8f8f8;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-section button:hover {
+    background: #e0e0e0;
+}
+
+#image-preview {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    z-index: 5;
+}
+
+/* 提交按钮 */
+.submit-btn {
+    padding: 8px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.submit-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+/* 评论列表样式 */
+.comments {
+    list-style: none;
+    padding: 0;
+}
+
+.comments li {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.comments li:hover {
+    transform: translateY(-3px);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+}
+
+.comment-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 20px;
+    flex-grow: 1;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ff9900;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.comment-user {
+    font-weight: bold;
+    color: #ff9900;
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.comment-content {
+    text-align: left;
+    margin: 10px 0;
+}
+
+.comment-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    align-self: flex-end;
+}
+
+.comment-actions button {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.comment-actions button:hover {
+    background: #ff5252;
+    transform: scale(1.05);
+}
+
+/* 回复样式 */
+.replies-container {
+    margin-top: 15px;
+    width: 100%;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.replies-toggle {
+    background: transparent;
+    color: #0077b6;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    text-align: left;
+    width: auto;
+}
+
+.replies-toggle:hover {
+    text-decoration: underline;
+}
+
+.replies {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 3px solid #eee;
+}
+
+.reply {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.reply-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #ff9900;
+}
+
+.reply-content {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.reply-user {
+    font-weight: bold;
+    color: #ff9900;
+}
+
+.reply-text {
+    color: #333;
+}

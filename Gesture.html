@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 Homepage</title>
+    <link rel="stylesheet" href="css/cssstyle2.css">
+</head>
+<body>
+    <body>
+        <!-- 导航栏 -->
+        <nav>
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="magicTools.html">神器图鉴</a></li>
+                <li><a href="interaction.html">交互方式</a></li>
+                <li><a href="experience.html">互动体验</a></li>
+                <li><a href="comments.html">共创社区</a></li>
+            </ul>
+        </nav>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西游记冒险</title>
+    <!-- 添加 MediaPipe 依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            touch-action: none;
+        }
+
+                /* 导航栏 */
+        nav {
+            background-color: #2D2D2D;
+            color: #F5F5F5;
+            padding: 14px 40px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        nav ul li {
+            margin-right: 30px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        nav ul li a:hover {
+            color: #0077b6;
+            background: rgba(255,255,255,0.1);
+        }
+
+
+        #gameCanvas {
+            background-image: url('../img/天宫bg.png');   /*背景图的路径 */
+            background-size: cover;  /* 图片将完全覆盖整个页面 */
+            background-position: center;  /* 背景图居中显示 */
+            background-repeat: repeat;  /* 不重复显示背景图 */
+            bottom: 10px;
+        }
+
+        #ui {
+            position: fixed;
+            top: 80px;
+            left: 40px;
+            line-height: 1.8;
+            color: white;
+            font-size: 20px;
+            text-shadow: 2px 2px 2px black;
+        }
+
+
+        #controls {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #ff9900;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        #handCanvas {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            z-index: 1001;
+        }
+
+       
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <div>生命: <span id="lives">3</span></div>
+        <div>得分: <span id="score">0</span></div>
+        <div>仙桃: <span id="peaches">0</span></div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="controls">
+        <button id="startBtn">开始游戏</button>
+        <button id="retryBtn" style="display: none;">重新开始</button>
+    </div>
+    <canvas id="handCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        // 设置画布尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 游戏对象
+        const Game = {
+            isRunning: false,
+            score: 0,
+            lives: 3,
+            peaches: 0,
+            player: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 80,
+                speed: 8,
+                isMovingLeft: false,
+                isMovingRight: false
+            },
+            obstacles: [],
+            items: [],
+            skill: {
+                freezeDuration: 0,
+                cloudActive: false
+            }
+        };
+        // 图像资源
+        const playerImage = new Image();
+        playerImage.src = './img/孙悟空.png';
+        const peachImage = new Image();
+        peachImage.src = './img/仙桃.png';
+        const bombImage = new Image(); 
+        bombImage.src = './img/炸弹.png';
+
+        const images = {
+            player: drawPlayer,
+            obstacle: drawObstacle,
+            peach: drawPeach
+        };
+
+        function drawPlayer(x, y) {
+            ctx.drawImage(playerImage, x, y, 160, 160);
+        }
+
+        function drawObstacle(x, y) {
+            ctx.drawImage(bombImage, x, y, 60, 60);
+        }
+
+        function drawPeach(x, y) {
+            ctx.drawImage(peachImage, x, y, 50, 50);
+        }
+
+        // 游戏逻辑
+        function spawnObstacle() {
+            if (Math.random() < 0.02) {
+                Game.obstacles.push({
+                    x: Math.random() * (canvas.width - 50),
+                    y: -50,
+                    width: 50,
+                    height: 50
+                });
+            }
+        }
+
+        function spawnItem() {
+            if (Math.random() < 0.05) {
+                Game.items.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: -30,
+                    width: 30,
+                    height: 30,
+                    type: 'peach'
+                });
+            }
+        }
+
+        function checkCollisions() {
+            // 障碍物碰撞检测
+            Game.obstacles.forEach((obs, index) => {
+                if (detectCollision(Game.player, obs)) {
+                    Game.lives--;
+                    Game.obstacles.splice(index, 1);
+                    updateUI();
+                }
+            });
+
+            // 物品收集
+            Game.items.forEach((item, index) => {
+                if (detectCollision(Game.player, item)) {
+                    if (item.type === 'peach') {
+                        Game.peaches++;
+                        Game.score += 10;
+                        if (Game.peaches >= 16) {
+                            alert('恭喜通过第一关！');
+                            resetGame();
+                        }
+                    }
+                    Game.items.splice(index, 1);
+                    updateUI();
+                }
+            });
+        }
+
+        function detectCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        // 初始化手势识别
+        let videoElement = document.createElement('video');
+        videoElement.style.display = 'block';  // 改为block以显示视频
+        videoElement.style.transform = 'scaleX(-1)';  // 镜像显示
+        videoElement.autoplay = true;
+        videoElement.playsInline = true;  // 在iOS上需要这个属性
+        document.body.appendChild(videoElement);
+
+        // 创建手部跟踪画布
+        const handCanvas = document.getElementById('handCanvas');
+        const handCtx = handCanvas.getContext('2d');
+
+        // 设置画布尺寸为显示尺寸
+        function resizeHandCanvas() {
+            handCanvas.style.width = '200px';
+            handCanvas.style.height = '150px';
+            // 设置实际分辨率
+            handCanvas.width = 640;
+            handCanvas.height = 480;
+        }
+        resizeHandCanvas();
+
+        // 初始化MediaPipe Hands
+        const hands = new Hands({
+            locateFile: (file) => {
+                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+            }
+        });
+
+        // 配置手部跟踪参数
+        hands.setOptions({
+            maxNumHands: 1,  // 只检测一只手
+            modelComplexity: 1,
+            minDetectionConfidence: 0.7,  // 提高检测置信度
+            minTrackingConfidence: 0.7    // 提高跟踪置信度
+        });
+
+        // 处理手部检测结果
+        hands.onResults((results) => {
+            // 清除画布
+            handCtx.save();
+            handCtx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+            
+            // 绘制摄像头画面
+            handCtx.drawImage(results.image, 0, 0, handCanvas.width, handCanvas.height);
+            
+            // 镜像处理
+            handCtx.scale(-1, 1);
+            handCtx.translate(-handCanvas.width, 0);
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+                
+                // 计算手掌中心点（使用食指根部和中指根部的中点）
+                const indexFingerBase = landmarks[5];
+                const middleFingerBase = landmarks[9];
+                const palmCenter = {
+                    x: (indexFingerBase.x + middleFingerBase.x) / 2,
+                    y: (indexFingerBase.y + middleFingerBase.y) / 2
+                };
+
+                // 绘制手部关键点和连接线
+                drawConnectors(handCtx, landmarks, HAND_CONNECTIONS, 
+                    {color: '#00FF00', lineWidth: 3});
+                drawLandmarks(handCtx, landmarks, 
+                    {color: '#FF0000', lineWidth: 2, radius: 4});
+
+                // 特别标记手掌中心点
+                handCtx.beginPath();
+                handCtx.arc(
+                    palmCenter.x * handCanvas.width,
+                    palmCenter.y * handCanvas.height,
+                    8, 0, 2 * Math.PI
+                );
+                handCtx.fillStyle = '#FFFF00';
+                handCtx.fill();
+
+                // 更新游戏角色位置
+                // 将手掌位置映射到游戏画布坐标
+                const gameX = (1 - palmCenter.x) * canvas.width; // 因为镜像了所以用1-x
+                const targetX = Math.max(0, Math.min(canvas.width - Game.player.width, 
+                                                   gameX - Game.player.width / 2));
+                
+                // 平滑移动
+                Game.player.x += (targetX - Game.player.x) * 0.3;
+
+                // 显示调试信息
+                handCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                handCtx.fillRect(10, 10, 200, 60);
+                handCtx.fillStyle = '#000';
+                handCtx.font = '12px Arial';
+                handCtx.fillText(`手掌位置: x=${Math.round(palmCenter.x * 100)}%, y=${Math.round(palmCenter.y * 100)}%`, 20, 30);
+                handCtx.fillText(`游戏角色位置: ${Math.round(Game.player.x)}`, 20, 50);
+            }
+
+            handCtx.restore();
+        });
+
+        // 设置摄像头
+        async function setupCamera() {
+            if (!checkMediaSupport()) return;
+
+            try {
+                // 请求摄像头权限
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user',
+                        frameRate: { ideal: 60 }
+                    }
+                });
+
+                // 设置视频源
+                videoElement.srcObject = stream;
+                
+                // 等待视频加载完成
+                await new Promise((resolve) => {
+                    videoElement.onloadedmetadata = () => {
+                        videoElement.play().then(resolve);
+                    };
+                });
+
+                console.log('摄像头初始化成功');
+
+                // 创建并启动MediaPipe相机
+                const camera = new Camera(videoElement, {
+                    onFrame: async () => {
+                        try {
+                            await hands.send({image: videoElement});
+                        } catch (error) {
+                            console.error('手部检测错误:', error);
+                        }
+                    },
+                    width: 640,
+                    height: 480
+                });
+
+                await camera.start();
+                console.log('MediaPipe相机启动成功');
+
+            } catch (error) {
+                console.error('摄像头设置错误:', error);
+                alert('摄像头访问失败！请确保:\n1. 允许浏览器访问摄像头\n2. 摄像头未被其他程序占用\n3. 摄像头已正确连接');
+            }
+        }
+
+        // 在页面加载完成后启动摄像头
+        document.addEventListener('DOMContentLoaded', () => {
+            const startButton = document.getElementById('startBtn');
+            startButton.addEventListener('click', async () => {
+                try {
+                    await setupCamera();
+                    startGame();
+                } catch (error) {
+                    console.error('游戏启动错误:', error);
+                    alert('游戏启动失败，请刷新页面重试');
+                }
+            });
+        });
+
+        // 检查浏览器是否支持getUserMedia
+        function checkMediaSupport() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('您的浏览器不支持摄像头访问，请使用现代浏览器（如 Chrome、Firefox、Edge 等）');
+                return false;
+            }
+            return true;
+        }
+
+        // 更新游戏循环中的移动逻辑
+        function updatePositions() {
+            // 玩家位置已经在手部检测结果中更新
+            
+            // 更新障碍物和物品位置
+            Game.obstacles.forEach(obs => obs.y += 3);
+            Game.items.forEach(item => item.y += 2);
+        }
+
+        // 游戏循环
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (Game.isRunning) {
+                spawnObstacle();
+                spawnItem();
+                updatePositions();
+                checkCollisions();
+                
+                if (Game.lives <= 0) {
+                    endGame();
+                    return;
+                }
+            }
+
+            // 绘制所有元素
+            drawElements();
+            animationFrameId = requestAnimationFrame(gameLoop);7
+        }
+
+        function drawElements() {
+            // 绘制玩家
+            images.player(Game.player.x, canvas.height - Game.player.height - 120);
+
+            // 绘制障碍物
+            Game.obstacles.forEach(obs => {
+                images.obstacle(obs.x, obs.y);
+            });
+
+            // 绘制物品
+            Game.items.forEach(item => {
+                images.peach(item.x, item.y);
+            });
+        }
+
+        // 游戏控制
+        function startGame() {
+            Game.isRunning = true;
+            Game.player.x = canvas.width / 2 - Game.player.width / 2;
+            Game.player.y = canvas.height - Game.player.height - 20;
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('retryBtn').style.display = 'inline';
+        }
+
+        function resetGame() {
+            Game.score = 0;
+            Game.lives = 3;
+            Game.peaches = 0;
+            Game.obstacles = [];
+            Game.items = [];
+            updateUI();
+            startGame();
+        }
+
+        function endGame() {
+            Game.isRunning = false;
+            cancelAnimationFrame(animationFrameId);
+            alert(`游戏结束！得分：${Game.score}`);
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = Game.score;
+            document.getElementById('lives').textContent = Game.lives;
+            document.getElementById('peaches').textContent = Game.peaches;
+        }
+
+        // 事件监听
+        document.addEventListener('keydown', (e) => {
+            if (!Game.isRunning) return;
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    Game.player.isMovingLeft = true;
+                    break;
+                case 'ArrowRight':
+                    Game.player.isMovingRight = true;
+                    break;
+                case ' ':
+                    // 定身术实现
+                    Game.skill.freezeDuration = 1000;
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    Game.player.isMovingLeft = false;
+                    break;
+                case 'ArrowRight':
+                    Game.player.isMovingRight = false;
+                    break;
+            }
+        });
+
+        // 按钮事件
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('retryBtn').addEventListener('click', resetGame);
+
+        // 初始化游戏循环
+        gameLoop();
+    </script>
+</body>
+</html>
+</html>

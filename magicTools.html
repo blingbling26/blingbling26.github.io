@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<script src="script.js"></script>
+<script src="Gesture.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《西游记》Journey to the West</title>
+    <link rel="stylesheet" href="css/cssstyle.css">
+</head>
+<body>
+     <!-- 导航栏 -->
+     <nav>
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="magicTools.html">神器图鉴</a></li>
+            <li><a href="interaction.html">交互方式</a></li>
+            <li><a href="experience.html">互动体验</a></li>
+            <li><a href="comments.html">共创社区</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <!-- 第一行：神器图鉴标题 -->
+        <h1>神器图鉴</h1>
+    </header>    
+    <!-- 第二行：搜索框 -->
+    <section id="searchSection">
+        <input type="text" id="searchBox" placeholder="输入神器名称搜索..." />
+        <button id="searchButton">搜索</button>
+    </section>
+
+    <!-- 搜索提示 -->
+    <div id="searchMessage" style="color: red; display: none;">未查询到相关神器</div>
+
+    <script src="script.js"></script>
+
+    <main>
+        <!-- 神器展示 -->
+        <section id="tools">
+            <div class="tool-item">
+                <img src="img/筋斗云.png" class="tool-image">
+                <button id="magicTool1">筋斗云</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/金刚琢.jpg" class="tool-image">
+                <button id="magicTool2">金钢琢（金钢套）</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/紧箍儿.jpg" class="tool-image">
+                <button id="magicTool3">紧箍儿</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/九齿钉耙.jpg" class="tool-image">
+                <button id="magicTool4">九齿钉耙</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/避火罩.jpg" class="tool-image">
+                <button id="magicTool5">避火罩</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/飞龙宝杖.jpg" class="tool-image">
+                <button id="magicTool6">飞龙宝杖</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/金箍棒.png" class="tool-image">
+                <button id="magicTool7">如意金箍棒</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/红葫芦.jpg" class="tool-image">
+                <button id="magicTool8">紫金红葫芦 </button>
+            </div>
+            <div class="tool-item">
+                <img src="img/羊脂玉净瓶.jpg" class="tool-image">
+                <button id="magicTool9">羊脂玉净瓶</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/幌金绳.jpg" class="tool-image">
+                <button id="magicTool10">幌金绳</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/照妖镜.jpg" class="tool-image">
+                <button id="magicTool11">照妖镜</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/阴阳二气瓶.jpg" class="tool-image">
+                <button id="magicTool12">阴阳二气瓶</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/白玉盂儿.jpg" class="tool-image">
+                <button id="magicTool13">白玉盂儿</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/芭蕉扇.jpg" class="tool-image">
+                <button id="magicTool14">芭蕉扇</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/金铙.jpg" class="tool-image">
+                <button id="magicTool15">金铙</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/紫金铃.jpg" class="tool-image">
+                <button id="magicTool16">紫金铃</button>
+            </div>
+            </div>
+            <div class="tool-item">
+                <img src="img/定风丹.jpg" class="tool-image">
+                <button id="magicTool17">定风丹</button>
+            </div>
+            <div class="tool-item">
+                <img src="img/人种袋.jpg" class="tool-image">
+                <button id="magicTool18">人种袋</button>
+            </div>
+        </section>
+
+        <!-- 神器详情 -->
+        <section id="toolDetails">
+            <h2>神器详情</h2>
+            <div id="toolInfo">
+                <p>点击上面的神器按钮以查看详情。</p>
+                <div class="gif-container">
+                    <img src="img/people.gif" alt="欢迎图" class="gif-image">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/jsapp.js"></script>
+</body>
+</html>
+

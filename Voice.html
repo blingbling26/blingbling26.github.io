@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 Homepage</title>
+    <link rel="stylesheet" href="css/cssstyle2.css">
+    <style>
+        /* 让整个页面固定大小 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            text-align: center;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-image: url('./img/background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            background-color: rgba(45, 45, 45, 0.9);
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        #imageContainer {
+            position: fixed;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 400px;
+            z-index: 10;
+        }
+        
+        #imageContainer img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            opacity: 1; /* 修改：默认显示 */
+            transform: scale(1); /* 修改：默认显示 */
+        }
+        
+        /* 其他按钮样式保持不变 */
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        #startBtn {
+            min-width: 120px;
+            min-height: 100px;
+            position: relative;
+            margin-right: 50px;
+            margin-top: -70px;
+            z-index: 10;
+            background: transparent !important; /* 强制始终保持透明背景 */
+            border: none !important; /* 强制始终无边框 */
+            outline: none !important; /* 强制始终无轮廓 */
+            -webkit-appearance: none !important; /* 移除默认按钮样式 */
+            appearance: none !important; /* 移除默认按钮样式 */
+        }
+        
+        #startBtn:hover {
+            transform: translateY(-3px);
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+        }
+        
+        #startBtn:active {
+            transform: translateY(0);
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-right: -10px;
+            margin: 460px 10px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .tool-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2196F3, #1565C0);
+            border-radius: 30px;
+            font-size: 16px;
+        }
+        
+        .tool-btn:hover {
+            background: linear-gradient(135deg, #1E88E5, #0D47A1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        #status {
+            color: #555;
+            font-size: 18px;
+            min-height: 20px;
+            margin: 30px 0;
+            padding: 15px 25px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            display: inline-block;
+            position: fixed;
+            right: 30px;
+            top: 150px;
+            z-index: 10;
+            /* 对话框样式 */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
+            max-width: 300px;
+            /* 添加小三角 */
+            &:before {
+                content: '';
+                position: absolute;
+                right: -10px;
+                top: 20px;
+                border-left: 10px solid rgba(255, 255, 255, 0.9);
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+            }
+        }
+        
+        .magic-effect {
+            position: absolute;
+            top: 20;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        /* 修改：调整法阵位置到标题下方 */
+        .magic-circle {
+            position: absolute;
+            top: 120px; /* 调整到"神器召唤"标题下方 */
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 720px;
+            height: 720px;
+            z-index: 1;
+            animation: rotate 20s linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes rotate {
+            0% { transform: translate(-50%, 0) rotate(0deg); }
+            100% { transform: translate(-50%, 0) rotate(360deg); }
+        }
+        
+        /* 修改：神器出现动画结束后保持显示 */
+        @keyframes appear {
+            0% { transform: scale(0); opacity: 0; filter: blur(10px); }
+            60% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+        }
+        
+        .appear-animation {
+            animation: appear 1s forwards;
+        }
+        
+        .light-rays {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            z-index: 2;
+            opacity: 0;
+            transition: all 0.8s ease;
+            pointer-events: none;
+        }
+        
+        .light-rays-active {
+            width: 800px;
+            height: 800px;
+            opacity: 0.7;
+        }
+        
+        .main-content {
+            display: flex;
+            position: relative;
+            margin-right: auto;
+            margin-top: 50px;
+            z-index: 10;
+            padding: 30px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="magicTools.html">神器图鉴</a></li>
+            <li><a href="interaction.html">交互方式</a></li>
+            <li><a href="experience.html">互动体验</a></li>
+            <li><a href="comments.html">共创社区</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>神器召唤</h1>
+    </header>
+
+    <!-- 法阵旋转动画 -->
+    <img src="img/法阵.png" alt="法阵" class="magic-circle">
+    
+    <!-- 光芒效果 -->
+    <div class="light-rays"></div>
+        
+        <div id="status">点击左侧语音按钮后开始召唤神器</div>
+
+        <div class="main-content">
+            <img id="startBtn" src="img/语音.png" style="cursor: pointer; width: 60px; height: 60px;" alt="开始召唤">
+        
+        <div id="imageContainer">
+            <div class="magic-effect"></div>
+            <img id="displayImage">
+        </div>
+    </div>
+
+    <!-- 测试按钮
+    <div class="button-container">
+        <button class="tool-btn" data-key="金箍棒">显示金箍棒</button>
+        <button class="tool-btn" data-key="筋斗云">显示筋斗云</button>
+        <button class="tool-btn" data-key="紫金红葫芦">显示紫金红葫芦</button>
+        <button class="tool-btn" data-key="照妖镜">显示照妖镜</button>
+        <button class="tool-btn" data-key="芭蕉扇">显示芭蕉扇</button>
+    </div>
+    -->
+    
+    <script>
+        // 图片路径配置
+        const imageMap = {
+            '金箍棒': './img/神器金箍棒.png',
+            '如意金箍棒': './img/神器金箍棒.png',
+            '棒子': './img/神器金箍棒.png',
+            '筋斗云': './img/筋斗云.gif',
+            '云': './img/筋斗云.gif',
+            '紫金红葫芦': './img/神器红葫芦.png',
+            '葫芦': './img/神器红葫芦.png',
+            '红葫芦': './img/神器红葫芦.png',
+            '照妖镜': './img/神器照妖镜.png',
+            '镜子': './img/神器照妖镜.png',
+            '芭蕉扇': './img/芭蕉扇.jpg',
+            '扇子': './img/芭蕉扇.jpg'
+        };
+
+        // DOM元素引用
+        const startBtn = document.getElementById('startBtn');
+        const statusDiv = document.getElementById('status');
+        const displayImage = document.getElementById('displayImage');
+        const imageContainer = document.getElementById('imageContainer');
+        const magicEffect = document.querySelector('.magic-effect');
+        const lightRays = document.querySelector('.light-rays');
+        const magicCircle = document.querySelector('.magic-circle');
+
+        // 修改：统一处理函数，移除图片消失的效果
+        function handleActivation(key, source) {
+            const imgUrl = imageMap[key];
+            if (imgUrl) {
+                statusDiv.textContent = source === 'voice' 
+                    ? `语音识别到指令："${key}"` 
+                    : `按钮触发："${key}"`;
+                
+                // 设置新图片
+                displayImage.src = imgUrl;
+                displayImage.style.display = 'block';
+                
+                // 添加魔法效果
+                magicEffect.style.opacity = '1';
+                lightRays.classList.add('light-rays-active');
+                magicCircle.style.animationDuration = '5s';
+                
+                // 添加出现动画
+                displayImage.classList.add('appear-animation');
+                
+                setTimeout(() => {
+                    magicEffect.style.opacity = '0';
+                    magicCircle.style.animationDuration = '20s';
+                    lightRays.classList.remove('light-rays-active');
+                    
+                    // 移除动画类，但保持图片显示
+                    setTimeout(() => {
+                        displayImage.classList.remove('appear-animation');
+                    }, 1000);
+                }, 2000);
+            } else {
+                statusDiv.textContent = "未找到对应图片";
+            }
+        }
+
+        // 按钮点击处理
+        document.querySelectorAll('.tool-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.key;
+                handleActivation(key, 'button');
+            });
+        });
+
+        // 语音识别初始化
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'zh-CN';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                statusDiv.textContent = "正在聆听...请说出法宝名称";
+                startBtn.textContent = "识别中...";
+                startBtn.disabled = true;
+                startBtn.style.background = "linear-gradient(135deg, #9E9E9E, #616161)";
+            };
+
+            recognition.onresult = (event) => {
+                const result = event.results[0][0].transcript.trim();
+                console.log("识别结果:", result);
+                
+                const matchedKey = Object.keys(imageMap).find(key => 
+                    result.includes(key)
+                );
+                
+                if (matchedKey) {
+                    handleActivation(matchedKey, 'voice');
+                } else {
+                    statusDiv.textContent = `未识别到有效指令："${result}"，请重试`;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("语音识别错误:", event.error);
+                statusDiv.textContent = `识别出错: ${event.error}，请重试`;
+                startBtn.textContent = "开始说话";
+                startBtn.disabled = false;
+                startBtn.style.background = "linear-gradient(135deg, #4CAF50, #2E7D32)";
+            };
+
+            recognition.onend = () => {
+                startBtn.textContent = "开始说话";
+                startBtn.disabled = false;
+                startBtn.style.background = "linear-gradient(135deg, #4CAF50, #2E7D32)";
+            };
+
+            startBtn.addEventListener('click', () => {
+                recognition.start();
+            });
+        } else {
+            statusDiv.textContent = "您的浏览器不支持语音识别，请使用最新版Chrome浏览器";
+            startBtn.disabled = true;
+            startBtn.style.background = "linear-gradient(135deg, #9E9E9E, #616161)";
+        }
+    </script>
+</body>
+</html>

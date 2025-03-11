@@ -1,0 +1,228 @@
+/* 让整个页面固定大小 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+    background-image: url('../img/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 导航栏 - 保持原样 */
+nav {
+    background-color: #2D2D2D;
+    color: #F5F5F5;
+    padding: 14px 40px;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+nav ul li {
+    margin-right: 30px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+nav ul li a:hover {
+    color: #0077b6;
+    background: rgba(255,255,255,0.1);
+}
+
+/* 标题样式 */
+.experience-title {
+    text-align: center;
+    padding: 30px 0;
+    color: #000000;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.experience-title h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.experience-title p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* 游戏卡片容器 */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: -40px auto;  /* 将margin-top从10px改为-20px使容器整体上移 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 50px 20px;
+    min-height: 500px;
+}
+
+/* 卡片样式更新 */
+.card {
+    scroll-snap-align: center;
+    flex: 0 0 320px;
+    height: 480px;
+    background: rgba(38, 111, 45, 0.1);
+    border-radius: 20px;
+    padding: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-image {
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 20px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .card-overlay {
+    transform: translateY(0);
+}
+
+.card-overlay h2 {
+    color: #000000;
+    font-size: 24px;
+    margin: 0 0 10px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.card-overlay p {
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+    font-size: 16px;
+}
+
+.card-details {
+    padding: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.difficulty, .players {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 14px;
+}
+
+.play-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(45deg, #ffd900d1, #ff6b81c6);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.play-btn:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
+.btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.play-btn:hover .btn-icon {
+    transform: translateX(5px);
+}
+
+/* 激活状态的卡片样式 */
+.card.active {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+    z-index: 10;
+}
+
+.card.active .card-overlay {
+    transform: translateY(0);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .card {
+        flex: 0 0 280px;
+        height: 420px;
+    }
+    
+    .title {
+        font-size: 1.8em;
+    }
+    
+    .experience-title h1 {
+        font-size: 2rem;
+    }
+}

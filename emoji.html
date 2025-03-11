@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>心情照妖镜</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style_emoji.css">
+
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="magicTools.html">神器图鉴</a></li>
+            <li><a href="interaction.html">交互方式</a></li>
+            <li><a href="experience.html">互动体验</a></li>
+            <li><a href="comments.html">共创社区</a></li>
+        </ul>
+    </nav>
+    
+</head>
+
+<body>
+    <div class="title">心情照妖镜</div>
+    <div class="container">
+        <div id="status">系统初始化中<span class="loading"></span></div>
+        <div id="mainVideo">
+            <video id="video" autoplay muted playsinline></video>
+            <canvas id="mainCanvas"></canvas>
+            <canvas id="faceCanvas" class="emotion-image"></canvas>
+            <img id="emotionImage" class="emotion-image" src="" alt="表情图片">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script>
+        // 心情配置
+        const emotionConfig = {
+            neutral: { 
+                label: '平静', 
+                image: 'img/neutral.png',
+                color: '#4A90E2',
+                scale: 1.0,
+                score: 0
+            },
+            happy: { 
+                label: '开心', 
+                image: 'img/happy.png',
+                color: '#FFD700',
+                scale: 1.2,
+                effects: true,
+                score: 1
+            },
+            sad: { 
+                label: '伤心', 
+                image: 'img/sad.png',
+                color: '#4A4A4A',
+                scale: 0.9,
+                score: -1
+            },
+            angry: { 
+                label: '生气', 
+                image: 'img/angry.png',
+                color: '#FF4444',
+                scale: 1.1,
+                effects: true,
+                score: -2
+            },
+            fearful: { 
+                label: '害怕', 
+                image: 'img/fearful.png',
+                color: '#9B59B6',
+                scale: 0.95,
+                score: -1
+            },
+            disgusted: { 
+                label: '厌恶', 
+                image: 'img/disgusted.png',
+                color: '#2ECC71',
+                scale: 1.0,
+                score: -2
+            },
+            surprised: { 
+                label: '惊讶', 
+                image: 'img/surprised.png',
+                color: '#E67E22',
+                scale: 1.15,
+                effects: true,
+                score: 0
+            }
+        };
+
+        // 全局变量
+        let currentMood = 'neutral';
+        let isModelLoaded = false;
+        let animationId = null;
+        let retryCount = 0;
+        const MAX_RETRIES = 3;
+        let isProcessing = false;
+        let lastEmojiTime = 0;
+        let emojiCount = 0;
+
+        // 状态更新函数
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            if (!status) return;
+            
+            status.innerHTML = message;
+            if (isError) {
+                status.innerHTML += '<div class="error-message">请检查以下问题:<br>1. 摄像头权限是否已授予<br>2. 网络连接是否正常<br>3. 浏览器是否支持WebRTC</div>';
+                status.innerHTML += '<button class="retry-button" onclick="retryInitialization()">重试</button>';
+            } else {
+                status.innerHTML += '<span class="loading"></span>';
+            }
+        }
+
+        // 初始化摄像头
+        async function initializeCamera() {
+            const video = document.getElementById('video');
+            if (!video) return false;
+
+            try {
+                updateStatus('正在启动摄像头');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    }
+                });
+
+                video.srcObject = stream;
+                return new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play()
+                            .then(() => resolve(true))
+                            .catch((err) => {
+                                console.error('视频播放失败:', err);
+                                resolve(false);
+                            });
+                    };
+                });
+            } catch(err) {
+                console.error('摄像头访问失败:', err);
+                updateStatus('摄像头访问失败', true);
+                return false;
+            }
+        }
+
+        // 加载模型
+        async function loadModels() {
+            try {
+                updateStatus('正在加载模型');
+                await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+                    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+                ]);
+                
+                isModelLoaded = true;
+                return true;
+            } catch(err) {
+                console.error('模型加载失败:', err);
+                updateStatus('模型加载失败 - 请检查网络连接', true);
+                return false;
+            }
+        }
+
+        // 创建背景表情图片
+        function createBackgroundEmoji(mood) {
+            const now = Date.now();
+            if (now - lastEmojiTime < 1000) {
+                if (emojiCount >= 3) return;
+            } else {
+                lastEmojiTime = now;
+                emojiCount = 0;
+            }
+
+            const img = document.createElement('img');
+            img.src = emotionConfig[mood].image;
+            img.className = 'background-emoji';
+            
+            const scale = Math.random() * 1.7 + 0.3;
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 100;
+            const endY = -100;
+            
+            img.style.cssText = `
+                left: ${startX}px;
+                top: ${startY}px;
+                transform: scale(${scale});
+                z-index: -1;
+            `;
+            
+            document.body.appendChild(img);
+            emojiCount++;
+            
+            requestAnimationFrame(() => {
+                img.style.top = `${endY}px`;
+            });
+
+            setTimeout(() => {
+                if (img.parentNode) {
+                    document.body.removeChild(img);
+                }
+            }, 6000);
+        }
+
+        // 更新表情显示
+        function updateEmotionDisplay(expression, landmarks, faceBox, probability) {
+            const image = document.getElementById('emotionImage');
+            const video = document.getElementById('video');
+            const emotion = emotionConfig[expression] || emotionConfig.neutral;
+            
+            if (!image || !video) return;
+
+            // 计算面部特征
+            const leftEye = landmarks.getLeftEye();
+            const rightEye = landmarks.getRightEye();
+            const nose = landmarks.getNose();
+            const jawline = landmarks.getJawOutline();
+            
+            // 计算面部尺寸和角度
+            const faceWidth = rightEye[3].x - leftEye[0].x;
+            const faceHeight = jawline[8].y - landmarks.positions[24].y;
+            const faceAngle = Math.atan2(
+                rightEye[0].y - leftEye[0].y,
+                rightEye[0].x - leftEye[0].x
+            );
+
+            // 计算缩放和位置
+            const baseScale = Math.max(faceWidth, faceHeight) * emotion.scale;
+            const mirroredX = video.videoWidth - (nose[0].x + faceWidth/2);
+            const centerY = nose[0].y - faceHeight/2;
+
+            // 应用样式
+            image.src = emotion.image;
+            image.style.width = `${baseScale}px`;
+            image.style.height = `${baseScale}px`;
+            image.style.left = `${mirroredX - baseScale/2}px`;
+            image.style.top = `${centerY - baseScale/2}px`;
+            image.style.transform = `
+                scaleX(-1)
+                rotate(${faceAngle}rad)
+                scale(${0.8 + probability * 0.4})
+            `;
+            image.style.opacity = probability;
+            image.style.display = 'block';
+            
+            // 添加特效
+            if (emotion.effects) {
+                image.style.filter = `
+                    drop-shadow(0 0 10px ${emotion.color})
+                    brightness(${1 + probability * 0.2})
+                `;
+            }
+
+            // 显示心情指示器
+            updateMoodIndicator(expression, probability);
+            
+            // 创建背景表情
+            createBackgroundEmoji(expression);
+        }
+
+        // 添加心情指示器
+        function updateMoodIndicator(expression, probability) {
+            const indicator = document.querySelector('.mood-display') || 
+                createMoodIndicator();
+            const emotion = emotionConfig[expression];
+            
+            indicator.style.background = `
+                linear-gradient(135deg, 
+                ${emotion.color}40, 
+                ${emotion.color}80)
+            `;
+            indicator.innerHTML = `
+                <div style="font-weight: bold; font-size: 18px; color: ${emotion.color}">
+                    ${emotion.label}
+                </div>
+                <div style="font-size: 14px; opacity: 0.8">
+                    ${Math.round(probability * 100)}%
+                </div>
+            `;
+        }
+
+        function createMoodIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'mood-display';
+            document.querySelector('.container').appendChild(indicator);
+            return indicator;
+        }
+
+        // 心情检测
+        async function detectExpression() {
+            if (!isModelLoaded || isProcessing) return;
+            
+            const video = document.getElementById('video');
+            if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) {
+                requestAnimationFrame(detectExpression);
+                return;
+            }
+            
+            isProcessing = true;
+            
+            try {
+                const detection = await faceapi.detectSingleFace(
+                    video,
+                    new faceapi.TinyFaceDetectorOptions({
+                        inputSize: 320,
+                        scoreThreshold: 0.5
+                    })
+                )
+                .withFaceLandmarks()
+                .withFaceExpressions();
+
+                if (detection) {
+                    const expressions = detection.expressions;
+                    const maxExpression = Object.entries(expressions)
+                        .reduce((a, b) => a[1] > b[1] ? a : b);
+                    
+                    updateEmotionDisplay(
+                        maxExpression[0],
+                        detection.landmarks,
+                        detection.detection.box,
+                        maxExpression[1]
+                    );
+                }
+            } catch(err) {
+                console.error('表情检测错误:', err);
+            } finally {
+                isProcessing = false;
+                animationId = requestAnimationFrame(detectExpression);
+            }
+        }
+
+        // 重试初始化
+        async function retryInitialization() {
+            if (retryCount >= MAX_RETRIES) {
+                updateStatus('初始化多次失败，请刷新页面重试', true);
+                return;
+            }
+            retryCount++;
+            cleanup();
+            await main();
+        }
+
+        // 主函数
+        async function main() {
+            try {
+                const [cameraInitialized, modelsLoaded] = await Promise.all([
+                    initializeCamera(),
+                    loadModels()
+                ]);
+                
+                if (cameraInitialized && modelsLoaded) {
+                    updateStatus('系统就绪');
+                    setTimeout(() => {
+                        const status = document.getElementById('status');
+                        if (status) status.style.display = 'none';
+                    }, 2000);
+                    detectExpression();
+                } else {
+                    updateStatus('初始化失败', true);
+                }
+            } catch(err) {
+                console.error('系统错误:', err);
+                updateStatus('系统错误 - ' + err.message, true);
+            }
+        }
+
+        // 清理函数
+        function cleanup() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            const video = document.getElementById('video');
+            if (video && video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+            
+            isModelLoaded = false;
+            isProcessing = false;
+            currentMood = 'neutral';
+            lastEmojiTime = 0;
+            emojiCount = 0;
+
+            // 清理背景表情
+            document.querySelectorAll('.background-emoji').forEach(el => el.remove());
+        }
+
+        // 事件监听
+        window.addEventListener('load', main);
+        window.addEventListener('unload', cleanup);
+        window.addEventListener('error', (err) => {
+            console.error('全局错误:', err);
+            updateStatus('发生错误 - ' + err.message, true);
+        });
+    </script>
+</body>
+</html>

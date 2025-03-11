@@ -1,0 +1,364 @@
+<!--
+	此示例下载自 https://echarts.apache.org/examples/zh/editor.html?c=sankey-levels&code=G4QwTgBA9gDgLgSygOwNwCh0WxUlaIoQC8EA3ljonADYCmAXOZTlXQB5xMDkAwgBYJkdAM50IAWQCecflBpQA5lIC0ASWQiYCMHQAmEDXDpgQAY0LJuAGhasI9AGZcI3M3WTGw3OwF9brHBQ8ogwTBT2VGAIioomPAjGALY2doHRsSYA8sg8SVAArmL5wHSpkdiOUGBJIHBeTI4FyBZIyAAUMOAgSSIAlMwV9rpwBWDIEF2mvQB0enUgMyKFYO4QAPyT3bPzcIvLY2sA1K4QgEmEpydTPSJzCzN7YHFwECfcADwARmAA9AB83FergA6nQYvwXICrttbrtFqAaAVxExrjt7sgenQMENfH4AjgxNFREwANoRCpwKQwRiuEQgZAAazoUnKFRoICkhUhyBQZWsEB-PwgADkoBAqqtxOzOQUXsJ9PpxdUIABlelMqRpIY4OGkrXanD6-yCwB6noALNUAsCqAB88jawyBikjTuIAgzUA8IaARcTALHegCWLAA6yAA4vIDJ96XpFWYCno4jQbBAzHU6IpqlImAAGayJOhJFWU-jhMzyao8ADEAHYACxmCtlgBs3F8_ltOHtmJ4gGlvQDppoBEuX9KqgjrAdIKNBeZgUUbjCeMybAqYgGYgWZzeZpZELCjApYAYtuACIATgAzHuG02DdhW46eO7AEUpgCIXf17hA9FAGABSIHDU8Ts_ni-XXMpHzcgN2LVwSz0MsjzTABGRwz3xA0rydQByX09QB-RX9AAVcEXgAITDERXH5ackxTdN-UA1cCyLLcIMcMwAA49AAVgPRDm0vB0nUAXTlAH98wBIlMATACn2zFBACQiABHJEaBoIRFEmeQ-XjX8KIXKjkiAkD1zo0sQFgvQDwPT5OIvcgeJ4QB_BMAawdAEt_f0AEFPAQCTHB0cReCgUpvFItS50opctJo0C9IYkAD0cT5WLMi8UJ4QAs7UAOYzAE45f1gSEPQJLEep5OQRSAAUEDkn8Z3UgDguAtcwPo7gS0cfQDzrWLkMs1xAD2MwBM_MAXO1ADVzf1txoKQFIgPdTGTCZcxARxHBI1SyoCjSguzbTqrCuqK1gkBor0FrtXi1xAGpfd1ACK_QBrEMAMqD_QAJUVZMxl2vyFv_TSVpC3TN1LWsQFYrajz2oYDu4QAo_0AIEDAEjnQABxUAN5d_QgT9w1wEAxFK8jFoqt6qtoz6INrCsD1YgBRU9GyQ_a2u4QAZPXdQBnvxu2AVLIv9AuorHQpxuqZv0EA0wBiogYSwAcjMAA-cBvMOgJJgXRCWAEbqXAWMnrRl7lpXNmPvAzm6E-AAmKs-ciIHAHNHQA0zUAHVSxPyZAJN0UoQDyxSkh0MBqlR5mltZnSatLI9awPNMzF50muIsttXC9LDA2DCBCOQR75uVlnKq99aSzoRxa1YismIN-wgcAXzdwcAIbdI-BQRjAgAArL9xE-KAAHdFYT92MbVlOOfLKsa3rYPzKBwBaoMASVDAHEjf0CvZTwQCECT6Gm8V6Td8rXrbtaO4MoyTNzu0KfdQBNlP9IMaAMMwpCSUMaBERf0eX1bsc1-qzDMVjA63lsKcALrlAFnPQBoiP9AAJAotQJhiEVKGRQV8Vae1XvfA8dADzmBzr3OKFNjqAGGUg-wYPAxzoHJS-SsW433et7CC8x5ja1ftxMO3BAAsaYAZjTAAxcoAFBtYYTGwvwcQEh7biDDBAbc2YuEQAAGqJHthAAq0QWgIBgPQYin5fLNyXqrW-7N76-39i_JBkQjRGkFIAErlABJcoATtNADw-qwI0QNAC30YAZ_SDH-kEVABAawjAmHMJYCBTBYL8ltEEEIUjwh2DgBkOItVlysmwIEmIwSch5EKMUbyfI7ASlqPUeI4pmitBQJ0GEAxySRBGGMCYJIQ4ACJ7GOPEEILwjhxbEXAOIEQUgRDJGIrIOoEB7YKHrhAIoJgWlikqS4iwxSyZDGKfXRI_AIDhllu4YiyoQAwGkY4uobRiJFBGloKATIJgT0UAUEAcRrDDJKR4baDsID8CIioRwuhxCFk8C7Gg7S44QHyLoCAGJRimCeYWJISRmjLMsDMY55lilsOZA4OgPkDn1OpHQMwkzdCFkUMgRIbQIDGARTyBQygMX9M8CYKWdA4AgovMUnpkBflAL0LUl5UtvIIERtLGAKAxAiCOSMioxTagMhGgM0wGTNCvOqBUzwBQ0WlGeQYcwsyRAIE-PQJUkAQAQHGUy-kcRoCzQpbcYpRoAC6MxK4OI6B8b4_xuB9GxDgXEuIhiEPVsQuqLE9BHjMGWBsRpzwVHMRTQAV4GACAEwAKXq2OQI5eY8AECSucQKtx-D1KeIgN44Io4_GDCiJE1J3BQlkwiZkMA0TXD5B6SUBJrAkl1AaGklolgsnTH6OmvJxKCkQCKaC8NCzECSv5a49FCBalTKkA6Rx7TFku3MPwUlBpilBAuYA-kKhfkwFlCYJcBLY3ovruw95DSmnZhEFO7UxSvyVyKC8WQYJICfDoJc2W1QqLruqWsHB2YPBwHZYe0ZPCe2CuFfMeSiBRAQFDGIAwRAL3dMJNwA9nLIjFIRd0CwJh-2IDMOyyYugGq6BaKIUiKBjCcH5DwlAyY-Xrt7SgYFsH7DFLUC8eg0K4hrMJH-nBCk8MEs4O0-udThAiA_dR1gx6Xm1ARUIKUdBwCovynijDDLEYqupEOFA9sEAAC99Cfq5Tw5lrKo3iA4EphAHh3D8g8JcyRMmijbWKokKQeqhiGuNUIdoZrfgAitX4dAdqKgOvbvfGaM1Pj_R85Eb1WjAYU0ABVKgAdeVDQGUQXzxAxoo1YeNi1E3Jt8WERtGKglZpzQE_LBbchFtieJUoYSlXJKrU0GtbQ603ByUafJ4xW0lIS00sYoqvCpYgJh3psmIOOlkFAMDs1TkKoUlpuDVKAXTnRdeuA9c6BYP4POoVPDd3NIxfwF2BRFCTJgPwRpyynlMaSwJkpUBnBYKEMAeQssZMWb0ERmo_JlRNDkioOuegpDCtKI6TwurBM4DBYIFpVJxA3bXb139DGXFMYgGITQypMX8GxUoYzMGSk8NE4IYQkKpMjXtrOCZvRZNIqUKijTUrYeEpGBAC73Wrugo6Q3EaOrZM_peOM2QUyYgiKedt_da72kfLqGMe2_IeTIBUD5c-qqOTAoNUak1rmvjuctda7AtqjR-egbVEs17QzzE9TiTlvqqGAC8vQAL6mhpVF0RAoiUuCvcRATL2ofGppy7kvLmaQnJCq3mqJpXuDFriZVsmFaUn0Tq4KxrvRmtDFa4UkpjuVmiJ5-igbQ4hvsKV_9vQCAubYfo1ABbrKZs0eVG-tFQGhDi7iEoUwx2R1aHFvT2Nu39uHd2-IUtQOSWg-wMUz7nStWTDoLAeg_JkxjfQzLcp6GhAx7aB9yAjLJMg5KWw_tXe-v77q_MIfWeJjN8UK3wQZg6fwpQAOEd-RwwXw5SUrdJhYWZ6eU7rwm33n0ntikA0wMFnWaHDCHD2BeXWyAWAxvRADvTAFfzZ0flEDlU-Fs0pCIxeXuWEFaFlkpFgOW1WwmGkRqSo3TydxfCeWzyIBu2MAmHu0eyAyfSCDz3kiZAFyaXpFM2ryExlVQPlQwKkCwIMGEGW2qAZGR0CQKAsBZyoiSC6FaBk3DDMH7TaBUB5Wm1V2c1NU1wtU81YD13tSUSIVTiiiYjTDLB1nNwqHC3sCt2vFcEADdFQANblQ0sgL1IBXc40FEMsvEvcU1QgeBXDAAsHUACpzQABeNAAGJUABC3AxHwYwqBO-I3Cwz4QyELL1QTW0QUQAWDlAAYFQMRMUAHK5QAfFc4j9FABlv0ABzzEOIGQALh1AAP7UAA3lQANGU-x1NPILM4h3cdYDdkjSwXU3UPVNFyYqFABZeUADt_QAb88osx4oA5VLBVRBBnAei-iVEjdAsooQs7DIsqFAAjfUADanVovsS5akCAAQDVRmfyecXokwx1VOE3L8EAChUORw7gQATu1AB5xOOOQF4AWXMDs3OK6KuOeiYFuKSPWNLHMMsOsJGN2LeMADHowAaiUbo78UUOjVi7j_MUi0w0jXUXigZAAOFUAG3494s0PsGQyQypMULySecTeRJmdScE5OQ3KEvQT4CsWsWEnY_mCmQAL7UEpAAGdUAE6HAaBAdgRUcecWTEiEjWI3YLcMP2AkimQATycEpABcc0AEQVPsakVQ9yG_LIIkSeHwxkxaZkzGbEqEx-cMGKOE3kqhQAP3NUIfjcJDsXgLj8oQTE4IBzSV5-iSEDwjIjJlSqFABOUyaMAHrnQAYI1_RCZkBZYXZkAh8gTLiZSWT_S6pPhmJcTdo7TDRtRTQzRABvH0AGj1WoimQAf1S9j_QAAZEjCAP-MMegd3I8NYuUgYvQV1d1EMt4xhQAQAMD5kYwRKQWy2ynV6pAtgseynRv5AAFbX9EInAXS3nFbKxNZIgkeLNzzLzgpkADB1CMm6BSPBXwlcscswz4Cwqw6cngFhOuXKL092Vc2U8c1I9I681wOmZAa6BmUctcjM-qdkzk7kkfV4p0Yeas5AFUeFVg3858h4o8RUjibc7eKhOyec34-JBk64pgJ89MyEhia0ugW0nkw2CmVBQAbZSFycEm5TTTy_z8K6ogzAykKSKdyqFLp_Q_j2QQN-BYK8L2yNzszPhczWKUK3jAB0jwOIXIbhouwogFwotPXLqhQKzOIpAqBkAGAXCCx3bdM7PixS_8rmPQWsBCZCt-KhXciC78sAvjY82inCs8jueCMsJiDks8LifVajI0PKBkEQPUA0ZsQs0swAT-0g1zRaiDhJQeAqzaz6zGy45mz-RHhngeA3QvQ_Qo4j5gMwwIwowYw4wEQkQmAmJRKWxIr3BoqIK6yZN4q9BEqMVwAUrXABIRJLZJIZJqK5ZlICr7YiqIASr1LyqnQYrkBqrFJar6rkriUeAuo-oBohoRoxoDkiApoZo5pCqaQBquIIqVgKrXB-zByxA7M4wprIQuxexIKBxekQARwxwJx44NrirSrsAdrDgnQKKqKSokrGrpqjp3R0FMrwwJh8JqLjzHr-rnqk0-4hqeA0LOLMKTqfrIRbIHIw0XI3IPJziEb-RwatrzJXqorXB9zDz8pjzTqeB0JI5XSIQY4iJ1rerNrIayAYaiaDyvyjzEanhfruAI4MEsrY4HqGanrBrdqnRib2bSbOamqeaHwnwXwrYPwa4erERGaQKCa9ruBPzvzqQpbubqYtafycahaIa1bobRaeAOLfj7ZtpkZeLvqubIRjpzorovy7oVhBaVbhaQ51anRbyoB7zdbIQwYoYWF4Ya4kYUYjbPaTbvaza3qeBJLpLG5A6eBC4S50py5xBq5EY65k6o6-q8aLwfbYb0KvIfIU7w595Ab4xT5z4wbjbC6Aq47CbuA5yFyDkK7uAv5f5kAAEYCQEQwO787VbY64oWbuA_aA77bpa6EmFQ7wVJABEeE-FahFVhE9gnlxEhBVDpEgM5FlaC7Ibi7XAtKdTdKEwm5ybXBko0pkAMo45spiVaARoiovqkZo7G79px7T7ILjtkML7O6hZRZkBtxxZJZpYTAntFJ5YwAm5caj7m6NbwK-xoLXZp7uah5R5kApS6TrZZ5Zpqk0t37D7Tax7zaiarLCg45bLO7TYLZkA9xxJrZbZJNzknYwAXZ5F4HSGhhCzQrCjjFj7uBzq-wrqhwbrRx4x7rO7rFQ0yknFyM3dh6mAKwmbx6RHLrBxhxJHxxCh44r7uBYt4tEtutDBFGfDwbVGvLEGnQ0qfQ-bB645crowcEZGbF9E7EHEFG4cLGG6fgjw1HyGXQPR7Hq7QwnHj48rXH0HIRA0Q0PGw0I0u1ktzG2gD7Nr_HAn47XA7GMrD5HHwxImXHL6kaeAjGEnOskszGfG0nlH-rMmeGv6gm7xHwGH5a3ww7vwYmym4sKmTH3lvDaniGaQrGhGWm5bXwXkEYVIDG4nQ0O1I1o1UmUB0mVGEGyHsnuBKacI8Jaa45iI3G5GvGUmamVm6nRmbGKbMIdm3S9maU5pZng15mkn9NqnBlfHo6Lmi7LnmqhJRIGGmHpJZJzkWVJrSnXBZGEn5GTn3mhnLGsmW6Wr_nGGrYgXOqZNQWZnwXuA5mEmFnkm3mN0znhm1nGnAZx6UanJ0b3J3ky6TBO7cWnIXmlnTmiH4WRbNnKW0bEAMbaXsaGqHaeA7cHdKCXdlm2Xjavmm6NmW7Zr-oQGFqZMlqJpVQ9g1rDmoXjnCXUtVmIApWmnNm5X5rholXxoVq1XZpO7ymD5-mYWiWJXPn1nkJx6nbLbboDB7owB9HsXIXPHyltWlGSW9WEWNbXWXb3Wmd3bO7hWEmM9ncnlBniX2XR7nWgng6YY4ZpmI6sXBWIX3G_XvHYWk3JWQ2nR03Q6s3QBI6BXpaY2dSv8A2Pm-r9WhghH9b6Ydbum82jn_XE2HXm3S2eB22vzDaa3ubGXEnO1Xm-3dWW2fUfnuAgGxZ3BwHRBIG5ZJNYHO7XD3DPDG24WS2QLBRmagml2QGwGiUl8MXN2Snc3uBAB_L0ABYjYxUNUEboBVO1nV85p1g1luuhtq5hqFVhkadhzh7dtwhJjw7dfd4tx1sl-dmVjW3m6ugWjVgtz9wN5N8yY98e5D_Ju5zup9l9hJt90wD9mD_tkZwd8Oa5lDsMBlp5vF5ljDptqjo9n4E9zZvD6OVDrt7gQAUwTABy41DVunyArhne_fg8NnHrTtLkzqrnDtztvelutcDFtYo91c_t4Y45k-Ljk6zAU5zpkujft1jdFYTfFdnZ_fJaCcwbHgnj2GnnwfniIYMdU8qdMYk6Dbnek9s5Hns_pEc7wckwIYXj499eQGhY08k5Td_Y1pvvSkykftyhfuKmU-5p3cg73a8-4ZDhw9PdSkI-fdfc3bORY4Pbg9i5s646rvw5PjPntjJuxYnfxencs5i4Xb3gcZroa4vitd6Zta6wGfa-8-s_5nHu7v_g22R1W0HqXLHchHc_U5y78YCY5Zbsm97um4Huyvm4Mbrd_obZW4_oaaEc277vpBm9ASHoW54Ba-Y-i6DaYlO_xoXbQQcawRBtwX6-MaG_K9g4HfW9Df-o--BtBpM5FaO5G6w--cQ6dFnuYThgXs4UVWXv4TXqFzEQkR3pkTDvkQMYi6i-O8B6EYR_noLxR-4ReRXoEXXtES3skV3tkXAAh7M6h9Zas6k_sOw5-HyIEdCpiL58qJqIXcJ61a84McaJ-JVA6JTM9M0-o-4DF97ZG4McOOl9OM6NTLqa0_G6CeV8Lftc7smJmLmIWPRRVGWLgAV6B6dAN_-9c-xadJdN2Y9O6J17G9882aW7-8e4MZN9mOwfmLRRWqt5t6EZ96qYl-xfDOjNjPjJ0BQGTLd5Uly4Xcj889V-xZJLJIpLMCpM8BpPwynmEC4Ybs97znHoO7jaoL9-xYFJFLFIlIMClPcHD4Xer_M7r7vbVK1J1PhRLxHUNOM2NIq5Iaq8r6Cfu6nZZaLcd7val7aMgtl5T_b7i6dGn8WYd87ud6X-pvdOBLX-q5bs34Jej7va-J-L-MUMBNX4965-wHy82cy_9Cg9XXP-lsABe3QAUuMn25akUXgpHI_tqECo6cgmL_ZAG_y8JZ8F-zRJfjL1px38nupVTji3QgFQDu-0tAPmbxD6TQw-9_CfnaHHroDsuMA6WrHxjLIA4yCZJPm-jl7u9kBoOZsKgI1okDoOH_bmsiVRLIoacqfcvg_zKpBNaSQXVdNhChyd0CoYwXehAHw5BgHourHWIr2EEl9RB4gvjlm0kHvJ8I_tWgHwOjqKDbePAN9iylYRqDburgYUOJhUA-J-c10EAEyF1awRFe-TLBLwCibpdIQf8XgGoEkDEo5ABgWCI4NKpCNNB0g2QVGz45eCfBEgPwWNh9JBCDU1GPKHQGUR-4hgTqIalVnSFjBSgtldMDMFYheo_A-qbzBgDsAl4IA7QAgOigABkNQjFFDhhzVCiAxAVoa4CgCfBK40FS1LlmwBJApAFxMAHACWDEosgkaTJM0OQAGEbUmAcobNCqHjCJgdQhodSCaGLCSAbQ7gB0K6EWAehaQ15AMMuRDCRhcAMYbWkmHTDdcsw1gBUIWGLFlhlIVYbNEmEbDSAWwzod0OTz2B-hgw4YTlDOENYLhOuCAL4CAA
+	⚠ 请注意，该图表不是 Apache ECharts 官方示例，而是由用户代码生成的。请注意鉴别其内容。
+-->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+  <div id="container" style="height: 100%"></div>
+
+  
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/echarts.min.js"></script>
+  
+  <!-- Uncomment this line if you want to dataTool extension
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/extension/dataTool.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use gl extension
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-gl/2/files/dist/echarts-gl.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-stat extension
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-stat/latest/files/dist/ecStat.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-graph-modularity extension
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-graph-modularity/2/files/dist/echarts-graph-modularity.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use map
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/4.9.0/files/map/js/world.js"></script>
+  -->
+  <!-- Uncomment these two lines if you want to use bmap extension
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/extension/bmap.min.js"></script>
+  -->
+
+  <script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    
+    var option;
+
+    var option;
+
+    var option = {
+   //title: {
+     //   text: 'Chinese Mythology-Inspired Interaction',
+       // left: 'center'
+    //},
+    tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove',
+        formatter: function(params) {
+            return params.data.source ? params.data.source + ' → ' + params.data.target + '<br/>' + 'Weight: ' + params.data.value : params.data.name;
+        }
+    },
+    series: [{
+        type: 'sankey',
+        layout: 'none', // No force layout needed for Sankey
+                data: [
+                  
+            //神器名称
+            {name: '如意金箍棒\nGold banded cudgel', category: 0,itemStyle: {color: '#74c476'}},
+            {name: '筋斗云\nSomersault cloud', category: 0, itemStyle: {color: '#FFD93D'}},
+            {name: '金钢琢\nDiamond Jade', category: 0, itemStyle: {color: '#d7301f'}},
+            {name: '紧箍儿\nTight Bands ', category: 0, itemStyle: {color: '#fc8d59'}},
+            {name: '九齿钉耙\nDemon−quelling pole', category: 0, itemStyle: {color: '#a1d99b'}},
+            {name: '避火罩\nAnti−fire Cover', category: 0, itemStyle: {color: '#fa9fb5'}},
+            {name: '定风丹\nWind−settling Pill', category: 0, itemStyle: {color: '#fed976'}},
+            {name: '飞龙宝杖\nFlying Dragon Staff ', category: 0, itemStyle: {color: '#41ab5d'}},
+            {name: '紫金红葫芦\nRed gourd', category: 0, itemStyle: {color: '#6a51a3'}},
+            {name: '羊脂玉净瓶\n Jade vase', category: 0, itemStyle: {color: '#6495ED'}},
+            {name: '幌金绳\nRope', category: 0, itemStyle: {color: '#ffeda0'}},
+            {name: '定颜珠\nFace−preserving pearl', category: 0, itemStyle: {color: '#feb24c'}},
+            {name: '照妖镜\nDemon−revealing mirror', category: 0, itemStyle: {color: '#3690c0'}},
+            {name: '金箍儿\nGold Band', category: 0, itemStyle: {color: '#ef6548'}},
+            {name: '白玉盂儿\nWhite jade bowl', category: 0, itemStyle: {color: '#74c476'}},
+            {name: '芭蕉扇\nPlantain−leaf fan', category: 0, itemStyle: {color: '#a1d99b'}},
+            {name: '金铙\nGold cymbals', category: 0, itemStyle: {color: '#fcc5c0'}},
+            {name: '人种袋\nHuman seed bag', category: 0, itemStyle: {color: '#9e9ac8'}},
+            {name: '紫金铃\nGolden Bells', category: 0, itemStyle: {color: '#dadaeb'}},
+            {name: '阴阳二气瓶\n The Male and Female Vital Principles Jar', category: 0, itemStyle: {color: '#3690c0'}},
+        
+        
+        //交互方式    
+        {name: '语音交互\nVoice Interaction', category: 1, 
+         tooltip: {
+    trigger: 'item',
+    triggerOn: 'mousemove',
+    formatter: function(params) {
+        return [
+            "Voice interfaces are systems that allow users to interact",
+            "with devices or applications using spoken language,",
+            "enabling hands-free control and more natural communication.",
+            "They leverage speech recognition technology to interpret",
+            "user commands and provide responses,",
+            "making interactions more intuitive and accessible for a wide range of users."
+        ].join('<br/>');
+    }
+}
+        , itemStyle: {color: '#8dd3c7'}
+        },
+        
+        {name: '自适应交互\nAdaptive Interaction', category: 1, 
+         tooltip: {
+    trigger: 'item',
+    triggerOn: 'mousemove',
+    formatter: function(params) {
+        return [
+            "Adaptive interaction is a dynamic approach",
+            "to human-computer interaction where systems",
+            "adjust their behavior, interface elements,",
+            "and interaction modalities based on the user's",
+            "characteristics, preferences, context, and ongoing interaction.",
+            "It leverages user modeling, context awareness,",
+            "and machine learning to provide a personalized",
+            "and responsive experience, enhancing usability"
+        ].join('<br/>');
+    }
+}
+        , itemStyle: {color: '#ffffb3'}
+        },
+        
+        {name: '动作交互\nGesture Interaction', category: 1, 
+         tooltip: {
+    trigger: 'item',
+    triggerOn: 'mousemove',
+    formatter: function(params) {
+        return [
+            "Gesture interaction refers to the method of enabling",
+            "communication between humans and systems through physical gestures,",
+            "often involving hand, arm, or full-body movements.",
+            "This type of interaction leverages sensor technologies",
+            "and machine learning algorithms to recognize and interpret gestures,",
+            "allowing users to interact with digital systems in a natural, non-verbal way."
+        ].join('<br/>');
+    }
+}
+        , itemStyle: {color: '#bebada'}
+        },
+      
+        {name: '空间交互\nSpatial Interaction', category: 1, 
+         tooltip: {
+    trigger: 'item',
+    triggerOn: 'mousemove',
+    formatter: function(params) {
+        return [
+            "Spatial interaction refers to the way different locations",
+            "or entities in a geographic space interact through the movement",
+            "or flow of people, goods, services, information, or ideas.",
+            "This interaction is fundamental in geographic and economic models,",
+            "where spatial patterns are analyzed to understand human behavior,",
+            "accessibility, and connectivity between places.",
+            "Spatial interaction often involves factors like distance,",
+            "accessibility, and network structures, impacting decision-making"
+        ].join('<br/>');
+    }
+}
+        , itemStyle: {color: '#fb8072'}
+        },
+        
+        {name: '其他交互\nOther Interaction', category: 1, 
+         tooltip: '其他尚未提到的交互'
+        , itemStyle: {color: '#80b1d3'}
+        },
+         
+         //不同交互方式产生的交互结果
+            {name: '尺寸变化\nSize Change', category: 2, itemStyle: {color: '#8dd3c7'}},
+            {name: '位置移动\nPosition Shift', category: 2, itemStyle: {color: '#ffffb3'}},
+            {name: '形状变化\nShape Change', category: 2, itemStyle: {color: '#bebada'}},
+            {name: '容量变化\nCapacity Change', category: 2, itemStyle: {color: '#fb8072'}},
+            {name: '识别\nRecognize', category: 2, itemStyle: {color: '#80b1d3'}},
+            {name: '吸进容器\nSuck into Container', category: 2, itemStyle: {color: '#fdb462'}},
+            {name: '固定地点\nFixed Place', category: 2, itemStyle: {color: '#b3de69'}},
+            {name: '特定朝向\nSpecific Orientation', category: 2, itemStyle: {color: '#fccde5'}},
+            {name: '松紧变化\nTight Change', category: 2, itemStyle: {color: '#d9d9d9'}},
+            {name: '改变环境\nEnvironment Change', category: 2, itemStyle: {color: '#bc80bd'}},
+         
+         //神器类型
+            {name: '长形\nLong Handle', category: 3, itemStyle: {color: '#8dd3c7'}},
+            {name: '气态\nGaseity', category: 3, itemStyle: {color: '#ffffb3'}},
+            {name: '袋子\nBag', category: 3, itemStyle: {color: '#bebada'}},
+            {name: '圆环\nRings', category: 3, itemStyle: {color: '#fb8072'}},
+            {name: '瓶\nbottle', category: 3, itemStyle: {color: '#80b1d3'}},
+            {name: '绳\nRope', category: 3, itemStyle: {color: '#fdb462'}},
+            {name: '扇形\nSector', category: 3, itemStyle: {color: '#b3de69'}},
+            {name: '罩子\nCover', category: 3, itemStyle: {color: '#fccde5'}},
+            {name: '铃铛\nBell', category: 3, itemStyle: {color: '#d9d9d9'}},
+            {name: '葫芦\nCalabash', category: 3, itemStyle: {color: '#bc80bd'}},
+            {name: '碗状\nBowl', category: 3, itemStyle: {color: '#ccebc5'}},
+            {name: '球形\nSpherical', category: 3, itemStyle: {color: '#ffed6f'}},
+            {name: '圆形\nRoundness', category: 3, itemStyle: {color: '#1f78b4'}}
+           ],
+        
+        links: [
+          
+          //神器类型对应神器
+            {source: '长形\nLong Handle', target: '如意金箍棒\nGold banded cudgel', value: 8},
+            {source: '长形\nLong Handle', target: '九齿钉耙\nDemon−quelling pole', value: 8},
+            {source: '长形\nLong Handle', target: '飞龙宝杖\nFlying Dragon Staff ', value: 8},
+           
+            {source: '气态\nGaseity', target: '筋斗云\nSomersault cloud', value: 8},
+            
+            {source: '铃铛\nBell', target: '紫金铃\nGolden Bells', value: 8},
+            
+            {source: '罩子\nCover', target: '避火罩\nAnti−fire Cover', value: 8},
+            
+            {source: '圆环\nRings', target: '紧箍儿\nTight Bands ', value: 8},
+            {source: '圆环\nRings', target: '金箍儿\nGold Band', value: 8},
+            {source: '圆环\nRings', target: '金钢琢\nDiamond Jade', value: 8},
+            
+            {source: '绳\nRope', target: '幌金绳\nRope', value: 8},
+            
+            {source: '葫芦\nCalabash', target: '紫金红葫芦\nRed gourd', value: 8},
+            
+            {source: '瓶\nbottle', target: '羊脂玉净瓶\n Jade vase', value: 8},
+            
+            {source: '碗状\nBowl', target: '白玉盂儿\nWhite jade bowl', value: 8},
+            
+            {source: '罩子\nCover', target: '金铙\nGold cymbals', value: 8},
+            
+            {source: '袋子\nBag', target: '人种袋\nHuman seed bag', value: 8},
+            
+            {source: '瓶\nbottle', target: '阴阳二气瓶\n The Male and Female Vital Principles Jar', value: 8},
+            
+            {source: '球形\nSpherical', target: '定风丹\nWind−settling Pill', value: 8},
+            {source: '球形\nSpherical', target: '定颜珠\nFace−preserving pearl', value: 8},
+            
+            {source: '扇形\nSector', target: '芭蕉扇\nPlantain−leaf fan', value: 8},
+            
+            {source: '圆形\nRoundness', target: '照妖镜\nDemon−revealing mirror', value: 8},
+            
+          //神器对应交互方式
+            {source: '筋斗云\nSomersault cloud', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '筋斗云\nSomersault cloud', target: '动作交互\nGesture Interaction', value: 4},
+        
+            {source: '如意金箍棒\nGold banded cudgel', target: '语音交互\nVoice Interaction', value: 8/3},
+            {source: '如意金箍棒\nGold banded cudgel', target: '自适应交互\nAdaptive Interaction', value: 8/3},
+            {source: '如意金箍棒\nGold banded cudgel', target: '动作交互\nGesture Interaction', value: 8/3},
+            
+            {source: '金钢琢\nDiamond Jade', target: '动作交互\nGesture Interaction', value: 4},
+            {source: '金钢琢\nDiamond Jade', target: '自适应交互\nAdaptive Interaction', value: 4},
+            
+            {source: '紧箍儿\nTight Bands ', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '紧箍儿\nTight Bands ', target: '自适应交互\nAdaptive Interaction', value: 4},
+            
+            {source: '九齿钉耙\nDemon−quelling pole', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '九齿钉耙\nDemon−quelling pole', target: '自适应交互\nAdaptive Interaction', value: 4},
+            
+            {source: '避火罩\nAnti−fire Cover', target: '自适应交互\nAdaptive Interaction', value: 4},
+            {source: '避火罩\nAnti−fire Cover', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            {source: '飞龙宝杖\nFlying Dragon Staff ', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '飞龙宝杖\nFlying Dragon Staff ', target: '动作交互\nGesture Interaction', value: 4},
+            
+            {source: '紫金红葫芦\nRed gourd', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '紫金红葫芦\nRed gourd', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            {source: '羊脂玉净瓶\n Jade vase', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '羊脂玉净瓶\n Jade vase', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            {source: '幌金绳\nRope', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '幌金绳\nRope', target: '自适应交互\nAdaptive Interaction', value: 4},
+            
+            {source: '定颜珠\nFace−preserving pearl', target: '其他交互\nOther Interaction', value: 4},
+            //{source: '定颜珠\nFace−preserving pearl', target: '穿戴式交互\nWearable Interaction', value: 4},
+            
+            {source: '照妖镜\nDemon−revealing mirror', target: '其他交互\nOther Interaction', value: 4},
+            
+            
+            {source: '金箍儿\nGold Band', target: '语音交互\nVoice Interaction', value: 4},
+            //{source: '金箍儿\nGold Band', target: '穿戴式交互\nWearable Interaction', value: 4},
+            {source: '金箍儿\nGold Band', target: '自适应交互\nAdaptive Interaction', value: 4},
+            //{source: '金箍儿\nGold Band', target: '遥控交互\nRemote Interaction', value: 4},
+            
+            {source: '白玉盂儿\nWhite jade bowl', target: '动作交互\nGesture Interaction', value: 8},
+            //{source: '白玉盂儿\nWhite jade bowl', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            {source: '芭蕉扇\nPlantain−leaf fan', target: '动作交互\nGesture Interaction', value: 4},
+            {source: '芭蕉扇\nPlantain−leaf fan', target: '语音交互\nVoice Interaction', value: 4},
+            
+            {source: '定风丹\nWind−settling Pill', target: '其他交互\nOther Interaction', value: 8},
+            //{source: '定风丹', target: '穿戴式交互\nWearable Interaction', value: 4},
+            
+            {source: '金铙\nGold cymbals', target: '自适应交互\nAdaptive Interaction', value: 4},
+            {source: '金铙\nGold cymbals', target: '动作交互\nGesture Interaction', value: 4},
+            
+            {source: '人种袋\nHuman seed bag', target: '动作交互\nGesture Interaction', value: 8/3},
+            {source: '人种袋\nHuman seed bag', target: '空间交互\nSpatial Interaction', value: 8/3},
+            {source: '人种袋\nHuman seed bag', target: '自适应交互\nAdaptive Interaction', value: 8/3},
+            
+            {source: '紫金铃\nGolden Bells', target: '动作交互\nGesture Interaction', value: 4},
+            {source: '紫金铃\nGolden Bells', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            {source: '阴阳二气瓶\n The Male and Female Vital Principles Jar', target: '语音交互\nVoice Interaction', value: 4},
+            {source: '阴阳二气瓶\n The Male and Female Vital Principles Jar', target: '空间交互\nSpatial Interaction', value: 4},
+            
+            
+            //不同交互方式对应的不同交互结果
+            {source: '语音交互\nVoice Interaction', target: '尺寸变化\nSize Change', value: 8},
+            {source: '语音交互\nVoice Interaction', target: '形状变化\nShape Change', value: 8},
+            {source: '语音交互\nVoice Interaction', target: '位置移动\nPosition Shift', value: 8},
+            {source: '语音交互\nVoice Interaction', target: '松紧变化\nTight Change', value: 8},
+            
+            {source: '动作交互\nGesture Interaction', target: '位置移动\nPosition Shift', value: 8},
+            {source: '动作交互\nGesture Interaction', target: '改变环境\nEnvironment Change', value: 8},
+            {source: '动作交互\nGesture Interaction', target: '吸进容器\nSuck into Container', value: 8},
+            
+            {source: '空间交互\nSpatial Interaction', target: '固定地点\nFixed Place', value: 8},
+            {source: '空间交互\nSpatial Interaction', target: '特定朝向\nSpecific Orientation', value: 8},
+            
+          {source: '自适应交互\nAdaptive Interaction', target: '尺寸变化\nSize Change', value: 8},
+          {source: '自适应交互\nAdaptive Interaction', target: '松紧变化\nTight Change', value: 8},
+          {source: '自适应交互\nAdaptive Interaction', target: '容量变化\nCapacity Change', value: 8},
+            
+          //{source: '其他交互\nOther Interaction', target: '直接穿戴\nDirect Wear', value: 8},
+            
+          //{source: '其他交互\nOther Interaction', target: '尺寸变化\nSize Change', value: 8},
+          {source: '其他交互\nOther Interaction', target: '位置移动\nPosition Shift', value: 8},
+            
+          {source: '其他交互\nOther Interaction', target: '改变环境\nEnvironment Change', value: 8},
+          
+          {source: '其他交互\nOther Interaction', target: '识别\nRecognize', value: 8},
+            
+            {source: 'Container Type', target: 'Purple Gold Gourd', value: 2},
+            {source: 'Container Type', target: 'Jade Pure Bottle', value: 2},
+            {source: 'Weapon Type', target: 'Nine-tooth Rake', value: 1},
+            {source: 'Golden Cudgel', target: 'HCI Method 1', value: 1},
+          
+            {source: 'Purple Gold Gourd', target: 'HCI Method 2', value: 1}
+        ],
+        lineStyle: {
+            color: 'source',
+            curveness: 0.5
+        }
+    }]
+};
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+  </script>
+</body>
+</html>
